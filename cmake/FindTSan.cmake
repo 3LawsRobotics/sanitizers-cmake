@@ -25,7 +25,7 @@
 option(SANITIZE_THREAD "Enable ThreadSanitizer for sanitized targets." Off)
 
 set(FLAG_CANDIDATES
-    "-g -fsanitize=thread"
+    "-O1 -g -fsanitize=thread"
 )
 
 

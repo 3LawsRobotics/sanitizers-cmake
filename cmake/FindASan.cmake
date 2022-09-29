@@ -26,11 +26,11 @@ option(SANITIZE_ADDRESS "Enable AddressSanitizer for sanitized targets." Off)
 
 set(FLAG_CANDIDATES
     # Clang 3.2+ use this version. The no-omit-frame-pointer option is optional.
-    "-g -fsanitize=address -fno-omit-frame-pointer"
-    "-g -fsanitize=address"
+    "-O1 -g -fsanitize=address -fno-omit-frame-pointer"
+    "-O1 -g -fsanitize=address"
 
     # Older deprecated flag for ASan
-    "-g -faddress-sanitizer"
+    "-O1 -g -faddress-sanitizer"
 )
 
 
