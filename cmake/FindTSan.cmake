@@ -1,8 +1,8 @@
 # The MIT License (MIT)
 #
 # Copyright (c)
-#   2013 Matthew Arsenault
-#   2015-2016 RWTH Aachen University, Federal Republic of Germany
+# 2013 Matthew Arsenault
+# 2015-2016 RWTH Aachen University, Federal Republic of Germany
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +25,39 @@
 option(SANITIZE_THREAD "Enable ThreadSanitizer for sanitized targets." Off)
 
 set(FLAG_CANDIDATES
-    "-O1 -g -fsanitize=thread"
+  "-O1 -g -fsanitize=thread"
 )
 
-
 # ThreadSanitizer is not compatible with MemorySanitizer.
-if (SANITIZE_THREAD AND SANITIZE_MEMORY)
-    message(FATAL_ERROR "ThreadSanitizer is not compatible with "
-        "MemorySanitizer.")
-endif ()
-
+if(SANITIZE_THREAD AND SANITIZE_MEMORY)
+  message(FATAL_ERROR "ThreadSanitizer is not compatible with "
+    "MemorySanitizer.")
+endif()
 
 include(sanitize-helpers)
 
-if (SANITIZE_THREAD)
-  if (NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" AND
-      NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-        message(WARNING "ThreadSanitizer disabled for target ${TARGET} because "
-          "ThreadSanitizer is supported for Linux systems and macOS only.")
-        set(SANITIZE_THREAD Off CACHE BOOL
-            "Enable ThreadSanitizer for sanitized targets." FORCE)
-    elseif (NOT ${CMAKE_SIZEOF_VOID_P} EQUAL 8)
-        message(WARNING "ThreadSanitizer disabled for target ${TARGET} because "
-            "ThreadSanitizer is supported for 64bit systems only.")
-        set(SANITIZE_THREAD Off CACHE BOOL
-            "Enable ThreadSanitizer for sanitized targets." FORCE)
-    else ()
-        sanitizer_check_compiler_flags("${FLAG_CANDIDATES}" "ThreadSanitizer"
-            "TSan")
-    endif ()
-endif ()
+if(SANITIZE_THREAD)
+  if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" AND
+    NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+    message(WARNING "ThreadSanitizer disabled for target ${TARGET} because "
+      "ThreadSanitizer is supported for Linux systems and macOS only.")
+    set(SANITIZE_THREAD Off CACHE BOOL
+      "Enable ThreadSanitizer for sanitized targets." FORCE)
+  elseif(NOT ${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+    message(WARNING "ThreadSanitizer disabled for target ${TARGET} because "
+      "ThreadSanitizer is supported for 64bit systems only.")
+    set(SANITIZE_THREAD Off CACHE BOOL
+      "Enable ThreadSanitizer for sanitized targets." FORCE)
+  else()
+    sanitizer_check_compiler_flags("${FLAG_CANDIDATES}" "ThreadSanitizer"
+      "TSan")
+  endif()
+endif()
 
-function (add_sanitize_thread TARGET)
-    if (NOT SANITIZE_THREAD)
-        return()
-    endif ()
+function(add_sanitize_thread TARGET TARGET_COMPILER)
+  if(NOT SANITIZE_THREAD)
+    return()
+  endif()
 
-    sanitizer_add_flags(${TARGET} "ThreadSanitizer" "TSan")
-endfunction ()
+  sanitizer_add_flags(${TARGET} "ThreadSanitizer" "TSan" ${TARGET_COMPILER})
+endfunction()

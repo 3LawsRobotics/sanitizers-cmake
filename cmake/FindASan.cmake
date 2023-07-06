@@ -1,8 +1,8 @@
 # The MIT License (MIT)
 #
 # Copyright (c)
-#   2013 Matthew Arsenault
-#   2015-2016 RWTH Aachen University, Federal Republic of Germany
+# 2013 Matthew Arsenault
+# 2015-2016 RWTH Aachen University, Federal Republic of Germany
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,35 +25,34 @@
 option(SANITIZE_ADDRESS "Enable AddressSanitizer for sanitized targets." Off)
 
 set(FLAG_CANDIDATES
-    # Clang 3.2+ use this version. The no-omit-frame-pointer option is optional.
-    "-O1 -g -fsanitize=address -fno-omit-frame-pointer"
-    "-O1 -g -fsanitize=address"
 
-    # Older deprecated flag for ASan
-    "-O1 -g -faddress-sanitizer"
+  # Clang 3.2+ use this version. The no-omit-frame-pointer option is optional.
+  "-O1 -g -fsanitize=address -fno-omit-frame-pointer"
+  "-O1 -g -fsanitize=address"
+
+  # Older deprecated flag for ASan
+  "-O1 -g -faddress-sanitizer"
 )
 
-
-if (SANITIZE_ADDRESS AND (SANITIZE_THREAD OR SANITIZE_MEMORY))
-    message(FATAL_ERROR "AddressSanitizer is not compatible with "
-        "ThreadSanitizer or MemorySanitizer.")
-endif ()
-
+if(SANITIZE_ADDRESS AND(SANITIZE_THREAD OR SANITIZE_MEMORY))
+  message(FATAL_ERROR "AddressSanitizer is not compatible with "
+    "ThreadSanitizer or MemorySanitizer.")
+endif()
 
 include(sanitize-helpers)
 
-if (SANITIZE_ADDRESS)
-    sanitizer_check_compiler_flags("${FLAG_CANDIDATES}" "AddressSanitizer"
-        "ASan")
+if(SANITIZE_ADDRESS)
+  sanitizer_check_compiler_flags("${FLAG_CANDIDATES}" "AddressSanitizer"
+    "ASan")
 
-    find_program(ASan_WRAPPER "asan-wrapper" PATHS ${CMAKE_MODULE_PATH})
-	mark_as_advanced(ASan_WRAPPER)
-endif ()
+  find_program(ASan_WRAPPER "asan-wrapper" PATHS ${CMAKE_MODULE_PATH})
+  mark_as_advanced(ASan_WRAPPER)
+endif()
 
-function (add_sanitize_address TARGET)
-    if (NOT SANITIZE_ADDRESS)
-        return()
-    endif ()
+function(add_sanitize_address TARGET TARGET_COMPILER)
+  if(NOT SANITIZE_ADDRESS)
+    return()
+  endif()
 
-    sanitizer_add_flags(${TARGET} "AddressSanitizer" "ASan")
-endfunction ()
+  sanitizer_add_flags(${TARGET} "AddressSanitizer" "ASan" ${TARGET_COMPILER})
+endfunction()

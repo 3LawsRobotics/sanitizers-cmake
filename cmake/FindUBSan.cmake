@@ -1,8 +1,8 @@
 # The MIT License (MIT)
 #
 # Copyright (c)
-#   2013 Matthew Arsenault
-#   2015-2016 RWTH Aachen University, Federal Republic of Germany
+# 2013 Matthew Arsenault
+# 2015-2016 RWTH Aachen University, Federal Republic of Germany
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +23,23 @@
 # SOFTWARE.
 
 option(SANITIZE_UNDEFINED
-    "Enable UndefinedBehaviorSanitizer for sanitized targets." Off)
+  "Enable UndefinedBehaviorSanitizer for sanitized targets." Off)
 
 set(FLAG_CANDIDATES
-    "-O1 -g -fsanitize=undefined"
+  "-O1 -g -fsanitize=undefined"
 )
-
 
 include(sanitize-helpers)
 
-if (SANITIZE_UNDEFINED)
-    sanitizer_check_compiler_flags("${FLAG_CANDIDATES}"
-        "UndefinedBehaviorSanitizer" "UBSan")
-endif ()
+if(SANITIZE_UNDEFINED)
+  sanitizer_check_compiler_flags("${FLAG_CANDIDATES}"
+    "UndefinedBehaviorSanitizer" "UBSan")
+endif()
 
-function (add_sanitize_undefined TARGET)
-    if (NOT SANITIZE_UNDEFINED)
-        return()
-    endif ()
+function(add_sanitize_undefined TARGET TARGET_COMPILER)
+  if(NOT SANITIZE_UNDEFINED)
+    return()
+  endif()
 
-    sanitizer_add_flags(${TARGET} "UndefinedBehaviorSanitizer" "UBSan")
-endfunction ()
+  sanitizer_add_flags(${TARGET} "UndefinedBehaviorSanitizer" "UBSan" ${TARGET_COMPILER})
+endfunction()
