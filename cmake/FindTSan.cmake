@@ -25,7 +25,7 @@
 option(SANITIZE_THREAD "Enable ThreadSanitizer for sanitized targets." Off)
 
 set(FLAG_CANDIDATES
-  "-O1 -g -fsanitize=thread"
+  "-O0 -g -fsanitize=thread"
 )
 
 # ThreadSanitizer is not compatible with MemorySanitizer.

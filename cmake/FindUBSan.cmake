@@ -26,7 +26,7 @@ option(SANITIZE_UNDEFINED
   "Enable UndefinedBehaviorSanitizer for sanitized targets." Off)
 
 set(FLAG_CANDIDATES
-  "-O1 -g -fsanitize=undefined"
+  "-O0 -g -fsanitize=undefined"
 )
 
 include(sanitize-helpers)
